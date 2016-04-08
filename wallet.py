@@ -1,33 +1,46 @@
 class Money:
-    type_currency = ["Usd", "Euro", "Hrn"]
 
-    def __init__(self, index_currency, amount):
-        self.currency = self.type_currency[index_currency]
+    currency = None
+    amount = None
+
+    def __init__(self, currency, amount):
+        self.currency = currency
         self.amount = amount
 
-    def add_money(self, index_currency, val):
-        self.amount += val
-        self.currency = self.type_currency[index_currency]
-
     def __str__(self):
-        return "Wallet has " + str(self.amount) + self.currency
-        pass
+        return "[Currency:" + str(self.currency) + ", amount:" + str(self.amount) + "]"
+
+
+class Operation:
+
+    type_of_operation = None
+    date_of_waste = None
+    money = None
+    tag = None
+
+    def __init__(self, operation, currency, amount, date, tags=None):
+        self.money = Money(currency, amount)
+        self.date_of_waste = date
+        self.type_of_operation = operation
+        self.tag = tags
 
 
 class Wallet:
-    tags = []
+    operations = []
 
-    def __init__(self):
-        self.money = Money(0, 0)
+    def put_money(self, currency, amount, date, tag=None):
+        oper = Operation(1, currency, amount, date, tag)
+        self.operations.append(oper)
 
-    def put_money(self, amount):
-
-        pass
-
-    def take_money(self, amount):
-        pass
+    def take_money(self, currency, amount, date, tag=None):
+        self.operations.append(Operation(-1, currency, amount, date(), tag))
 
 
+obj = Wallet()
 
+obj.put_money(0, 1000, '2016', 'Clothes children')
+obj.put_money(1, 150, '2015', 'foods')
+obj.put_money(0, 1250, '2015')
 
-
+for item in obj.operations:
+    print("Date: {0}, money: {1}, tags: {2}".format(item.date_of_waste, str(item.money), item.tag))
