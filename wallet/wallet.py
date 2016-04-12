@@ -38,8 +38,9 @@ if __name__ == '__main__':
     from money import *
     w = Wallet()
     w.put_money('hrn', 100, 2016, 'food family')
-    w.put_money('usd', 345, 2016, 'food family')
+    w.put_money('usd', 345, 'food family')
     w.put_money('usd', 1000, 2016, 'food clothes')
+    w.take_money('usd', 23, 'memory')
     w.take_money('hrn', 1000, 2016, 'food clothes')
     w.put_money('usd', 1000)
     w.get_operations()
