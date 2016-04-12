@@ -4,7 +4,10 @@ from money import Money
 class Operation:
 
     def __init__(self, operation, currency, amount, date, tags=None):
-        self.type_of_operation = TypeOfOperation()
+        if operation in ['in', 'out']:
+            self.type_of_operation = operation
+        else:
+            print("ERROR: Incorrect type of the operation!\n")
         self.money = Money(currency, amount)
         self.deal_of_time = date
         self.tags = []
@@ -12,11 +15,7 @@ class Operation:
 
 if __name__ == '__main__':
     from money import *
-    op = Operation(1, 0, 345, '2016', 'family food')
-    print(op.tags)
-    enum = TypeOfOperation()
+    op = Operation('in', 'usd', 345, '2016', 'family food')
+    print(op.type_of_operation, op.money, op.deal_of_time, op.tags )
 
-    a = enum.come_in
-    b = enum.come_out
-    print(a == b)
 

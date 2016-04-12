@@ -1,22 +1,45 @@
 from operation import *
+from datetime import date
 
 
 class Wallet:
-    operations = []
-    moneys = {"currency": "amount"}
 
-    def put_money(self, currency, amount, date, tags=None):
-        oper = Operation(1, currency, amount, date, tags)
-        self.operations.append(oper)
+    def __init__(self):
+        self.operations = []
+        self.operation = None
 
-    def take_money(self, currency, amount, date, tags=None):
-        self.operations.append(Operation(-1, currency, amount, date(), tags))
+    def put_money(self, currency, amount, deal_of_date=date.today(), tags=None):
+        self.operation = Operation('in', currency, amount, deal_of_date, tags)
+        self.operations.append(self.operation)
 
-    def get_money(self, currency):  # how many money I have in wallet this currency
-        pass
+    def take_money(self, currency, amount, deal_of_date=date.today(), tags=None):
+        if self.get_money(currency) < amount:
+            print("ERROR: attempting take out ", amount, currency, ": you haven`t money for this "
+                "operation! You have only", self.get_money(currency), currency)
+            return
+        self.operation = Operation('out', currency, amount, deal_of_date, tags)
+        self.operations.append(self.operation)
+
+    def get_money(self, currency):
+        count = 0
+        for item in self.operations:
+            if item.money.currency == currency:
+                count += item.money.amount
+        return count
+
+    def get_operations(self):
+        for item in self.operations:
+            print('Operation:', item.type_of_operation, 'Currency:',
+                  item.money.currency, 'Sum:',item.money.amount, 'Date:', item.deal_of_time,
+                  'Tags:', item.tags)
 
 
 if __name__ == '__main__':
     from money import *
-    w = Wallet(1, 0, 345, '2016')
-    print(op.performent_of_date)
+    w = Wallet()
+    w.put_money('hrn', 100, 2016, 'food family')
+    w.put_money('usd', 345, 2016, 'food family')
+    w.put_money('usd', 1000, 2016, 'food clothes')
+    w.take_money('hrn', 1000, 2016, 'food clothes')
+    w.put_money('usd', 1000)
+    w.get_operations()
