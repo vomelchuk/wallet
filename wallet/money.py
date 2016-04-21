@@ -3,23 +3,22 @@ from enums import CurrencyType
 
 class Money:
 
-    # currency global variables constans
-    # throw exeption
-
     def __init__(self, currency, amount):
-        if currency in CurrencyType:
-            self.currency = currency
-        else:
-            print('ERROR: Unsupported currency!')
+        try:
+            if currency not in CurrencyType:
+                print("no")
+                raise NameError
+            else:
+                print("yes")
+                self.currency = currency
+        except NameError:
+            print("Unsupported currency:", currency)
         self.amount = amount
-
-    def __str__(self):
-        return "[Currency:" + str(self.currency) + ", amount:" + str(self.amount) + "]"
 
 
 if __name__ == '__main__':
-    m = Money(CurrencyType.hrn1, 345)
-    print(m.currency, ": ", m.amount)
-    print(str(m))
-    # print(m.something)
-    pass
+    #mon = Money(CurrencyType.HRN, 234)
+    mon1 = Money(CurrencyType.USD, 234)
+
+
+    mon2 = Money(CurrencyType.hRN, 45)
