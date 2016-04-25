@@ -21,12 +21,3 @@ class Wallet:
 
     def get_money(self, currency):
         return self.moneys[currency]
-
-if __name__ == '__main__':
-    w = Wallet()
-
-    w.put_money(CurrencyType.HRN, 345, '2016', ["clothes", "wife"])
-    w.take_money(CurrencyType.HRN, 20, '2016')
-
-    a = w.get_money(CurrencyType.HRN)
-    print(a)
