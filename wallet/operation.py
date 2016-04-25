@@ -15,4 +15,3 @@ class Operation:
         self.money = money.Money(currency, amount)
         self.performDate = date
         self.tags = tags
-

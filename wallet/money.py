@@ -9,11 +9,3 @@ class Money:
 
         self.currency = currency
         self.amount = amount
-
-
-if __name__ == '__main__':
-    mon = Money(CurrencyType.HRN, 234)
-    mon1 = Money(CurrencyType.USD, 234)
-
-    #asd = CurrencyType.hRN
-    mon2 = Money(CurrencyType2.hRN, 45)
