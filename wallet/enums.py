@@ -7,5 +7,3 @@ class CurrencyType(Enum):
 
 class OperationType(Enum):
     PUT, GET = range(2)
-
-
