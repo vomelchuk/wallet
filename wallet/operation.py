@@ -4,7 +4,6 @@ from enums import CurrencyType
 
 
 class Operation:
-
     def __init__(self, operation, currency, amount, date, tags=[]):
         if operation not in OperationType:
             raise NameError("Unsupported operation!")
