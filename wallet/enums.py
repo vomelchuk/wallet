@@ -2,8 +2,8 @@ from enum import Enum
 
 
 class CurrencyType(Enum):
-    HRN, USD, EURO = range(3)
+    HRN, USD, EURO, ZLT = range(1, 5)
 
 
 class OperationType(Enum):
-    PUT, GET = range(2)
+    PUT, GET = range(1, 3)
