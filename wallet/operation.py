@@ -1,6 +1,7 @@
-import money
-from enums import OperationType
-from enums import CurrencyType
+import wallet.money
+from wallet import money
+from wallet.enums import OperationType
+from wallet.enums import CurrencyType
 
 
 class Operation:
@@ -14,3 +15,6 @@ class Operation:
         self.money = money.Money(currency, amount)
         self.performDate = date
         self.tags = tags
+
+    def get_operation(self):
+        return [self.type_of_operation, self.money, self.performDate, self.tags]

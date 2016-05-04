@@ -1,4 +1,4 @@
-from enums import CurrencyType
+from wallet.enums import CurrencyType
 
 
 class Money:

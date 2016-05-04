@@ -1,6 +1,8 @@
-import operation
-from enums import CurrencyType
-from enums import OperationType
+import wallet.operation
+from wallet import operation
+from wallet.enums import CurrencyType
+from wallet.enums import OperationType
+
 
 class Wallet:
     def __init__(self):
@@ -13,11 +15,17 @@ class Wallet:
 
     def take_money(self, currency, amount, deal_of_date, tags=[]):
         if self.get_money(currency) < amount:
-            print("Operation denied! No money!")
-            return None
+            return False
         self.operations.append(operation.Operation(OperationType.GET, currency, amount, deal_of_date, tags))
         self.moneys[currency] -= amount
 
     def get_money(self, currency):
         return self.moneys[currency]
 
+    def get_operations(self, currency):
+        operations = []
+        for operation in self.operations:
+            if operation.money.currency == currency:
+                operations.append((operation.type_of_operation.name, operation.money.currency.name,
+                                   operation.money.amount, operation.performDate, operation.tags))
+        return operations
