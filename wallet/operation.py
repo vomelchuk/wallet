@@ -11,10 +11,10 @@ class Operation:
         if currency not in CurrencyType:
             raise NameError("Unsupported currency:", currency)
 
-        self.type_of_operation = operation
+        self.operationType = operation
         self.money = money.Money(currency, amount)
         self.performDate = date
         self.tags = tags
 
     def get_operation(self):
-        return [self.type_of_operation, self.money, self.performDate, self.tags]
+        return [self.operationType, self.money, self.performDate, self.tags]

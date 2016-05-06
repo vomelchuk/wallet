@@ -15,9 +15,10 @@ class Wallet:
 
     def take_money(self, currency, amount, deal_of_date, tags=[]):
         if self.get_money(currency) < amount:
-            return False
+            return None
         self.operations.append(operation.Operation(OperationType.GET, currency, amount, deal_of_date, tags))
         self.moneys[currency] -= amount
+        return 1
 
     def get_money(self, currency):
         return self.moneys[currency]
@@ -26,6 +27,6 @@ class Wallet:
         operations = []
         for operation in self.operations:
             if operation.money.currency == currency:
-                operations.append((operation.type_of_operation.name, operation.money.currency.name,
+                operations.append((operation.operationType.name, operation.money.currency.name,
                                    operation.money.amount, operation.performDate, operation.tags))
         return operations

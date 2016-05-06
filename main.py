@@ -1,6 +1,7 @@
 from wallet.wallet import Wallet
 from wallet.enums import CurrencyType
 import os
+import pickle
 
 
 def print_head(title):
@@ -31,7 +32,7 @@ def get_currency():
     return currency
 
 
-def show():
+def show(obj):
     """ Show us how much money choosing currency we have got"""
     clear()
     print_head("How much money you have")
@@ -39,12 +40,12 @@ def show():
     if currency is None:
         print("Incorrect choice!")
         return
-    print("You have", w.get_money(currency), currency.name)
+    print("You have", obj.get_money(currency), currency.name)
     if return_to_menu():
-        show()
+        show(obj)
 
 
-def put():
+def put(obj):
     clear()
     print_head("Operation: put money into wallet")
     currency = get_currency()
@@ -54,12 +55,12 @@ def put():
     amount = float(input("amount: "))
     operation_date = input("Date: ")
     tags = input("Tags (through `;`):").split(";")
-    w.put_money(currency, amount, operation_date, tags)
+    obj.put_money(currency, amount, operation_date, tags)
     if return_to_menu():
-        put()
+        put(obj)
 
 
-def take():
+def take(obj):
     clear()
     print_head("Operation: take money from wallet")
     currency = get_currency()
@@ -69,46 +70,67 @@ def take():
     amount = float(input("amount: "))
     operation_date = input("Date: ")
     tags = input("Tags (through `;`):").split(";")
-    if w.take_money(currency, amount, operation_date, tags) is False:
+    if obj.take_money(currency, amount, operation_date, tags) is None:
         print("Operation denied! You have less than need!")
     if return_to_menu():
-        take()
+        take(obj)
 
 
-def reports():
+def reports(obj):
     clear()
     print_head("Report")
     currency = get_currency()
     if currency is None:
         print("Incorrect choice!")
         return
-    result = w.get_operations(currency)
+    result = obj.get_operations(currency)
     for item in result:
         print(item)
-    print("Remain:", w.get_money(currency), currency.name)
+    print("Remain:", obj.get_money(currency), currency.name)
     if not len(result):
         print("Nothing was made")
     if return_to_menu():
-        take()
+        take(obj)
 
 
-w = Wallet()
+def file_open(obj):
+    clear()
+    print_head("Opening file")
+    file_name = input("Type a file name: ")
+
+    if not os.path.isfile(file_name):
+        print("File doesn`t exist!")
+        if return_to_menu():
+            file_open(obj)
+
+    file = open(file_name, 'rb')
+    global wallet
+    wallet = pickle.load(file)
+    file.close()
+
+
+def file_save(obj):
+    clear()
+    print_head("Saving file")
+    file_name = input("Type a file name: ")
+    file = open(file_name, 'wb')
+    pickle.dump(obj, file)
+    file.close()
+
+
+wallet = Wallet()
+menu = {"1": [show, "View your wallet"], "2": [put, "Put money to wallet"], "3": [take, "Take money from wallet"],
+        "4": [reports, "Reports"], "5": [file_open, "Open file"], "6": [file_save, "Save file"], "7": [exit, "Exit"]}
 while True:
     clear()
     print_head("MENU")
-    print(
-        "1. View your wallet\n2. Put money from wallet\n3. Take money to wallet\n4. Reports(is developing...)\n5. Exit")
+    for item in sorted(menu.keys()):
+        print(item, end='')
+        print(".", menu[item][1])
+
     try:
-        choice = int(input("? "))
-        if choice == 1:
-            show()
-        if choice == 2:
-            put()
-        if choice == 3:
-            take()
-        if choice == 4:
-            reports()
-        if choice == 5:
-            break
+        choice = input("? ")
+        function = menu[choice][0]
+        function(wallet)
     except ValueError:
         print("Incorrect choice!")
