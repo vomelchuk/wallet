@@ -1,5 +1,6 @@
 from wallet.wallet import Wallet
 from wallet.enums import CurrencyType
+from datetime import date
 import os
 import pickle
 
@@ -53,7 +54,12 @@ def put(obj):
         print("Incorrect choice!")
         return
     amount = float(input("amount: "))
-    operation_date = input("Date: ")
+    operation_date = input("Date (yyyy-mm-dd): ")
+    if len(operation_date) == 0:
+        operation_date = date.today()
+    else:
+        operation_date = operation_date.split("-")
+        operation_date = date(int(operation_date[0]), int(operation_date[1]), int(operation_date[2]))
     tags = input("Tags (through `;`):").split(";")
     obj.put_money(currency, amount, operation_date, tags)
     if return_to_menu():
@@ -69,6 +75,11 @@ def take(obj):
         return
     amount = float(input("amount: "))
     operation_date = input("Date: ")
+    if len(operation_date) == 0:
+        operation_date = date.today()
+    else:
+        operation_date = operation_date.split("-")
+        operation_date = date(int(operation_date[0]), int(operation_date[1]), int(operation_date[2]))
     tags = input("Tags (through `;`):").split(";")
     if obj.take_money(currency, amount, operation_date, tags) is None:
         print("Operation denied! You have less than need!")
@@ -90,7 +101,7 @@ def reports(obj):
     if not len(result):
         print("Nothing was made")
     if return_to_menu():
-        take(obj)
+        reports(obj)
 
 
 def file_open(obj):
@@ -102,6 +113,7 @@ def file_open(obj):
         print("File doesn`t exist!")
         if return_to_menu():
             file_open(obj)
+        return
 
     file = open(file_name, 'rb')
     global wallet
@@ -118,9 +130,19 @@ def file_save(obj):
     file.close()
 
 
+def file_save_json(obj):
+    clear()
+    print_head("Saving file")
+    file_name = input("Type a file name: ")
+    file = open(file_name, 'w')
+    file.write(obj.to_json())
+    file.close()
+
+
 wallet = Wallet()
 menu = {"1": [show, "View your wallet"], "2": [put, "Put money to wallet"], "3": [take, "Take money from wallet"],
-        "4": [reports, "Reports"], "5": [file_open, "Open file"], "6": [file_save, "Save file"], "7": [exit, "Exit"]}
+        "4": [reports, "Reports"], "5": [file_open, "Open file"], "6": [file_save, "Save file"],
+        "7": [file_save_json, "Save file to JSON"], "8": [exit, "Exit"]}
 while True:
     clear()
     print_head("MENU")
