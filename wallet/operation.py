@@ -19,15 +19,6 @@ class Operation:
     def get_operation(self):
         return [self.operationType.name, self.money.currency.name, self.money.amount, self.performDate, self.tags]
 
-    def get_tags(self):
-        result = '['
-        for item in self.tags:
-            result += '"' + item + '"' + ","
-        result = result[:-1]
-        result += ']'
-
-        return result
-
     def to_json(self):
         return dict(operationType=self.operationType.value, money=self.money.to_json(),
                     performDate=str(self.performDate),
