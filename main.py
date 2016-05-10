@@ -3,6 +3,7 @@ from wallet.enums import CurrencyType
 from datetime import date
 import os
 import pickle
+import json
 
 
 def print_head(title):
@@ -121,6 +122,33 @@ def file_open(obj):
     file.close()
 
 
+def file_open_json(obj):
+    clear()
+    print_head("Opening file")
+    file_name = input("Type a file name: ")
+
+    if not os.path.isfile(file_name):
+        print("File doesn`t exist!")
+        if return_to_menu():
+            file_open_json(obj)
+        return
+
+    file = open(file_name, 'r')
+    data = file.read()
+    file.close()
+    parse_json = json.loads(data)
+    for item in parse_json["operations"]:
+        currency = CurrencyType(item['money']['currency'])
+        amount = item['money']['amount']
+        raw_date = item['performDate'].split('-')
+        perform_date = date(int(raw_date[0]), int(raw_date[1]), int(raw_date[2]))
+        tags = item['tags']
+        if item['operationType'] == 1:
+            obj.put_money(currency, amount, perform_date, tags)
+        if item['operationType'] == 2:
+            obj.take_money(currency, amount, perform_date, tags)
+
+
 def file_save(obj):
     clear()
     print_head("Saving file")
@@ -142,7 +170,7 @@ def file_save_json(obj):
 wallet = Wallet()
 menu = {"1": [show, "View your wallet"], "2": [put, "Put money to wallet"], "3": [take, "Take money from wallet"],
         "4": [reports, "Reports"], "5": [file_open, "Open file"], "6": [file_save, "Save file"],
-        "7": [file_save_json, "Save file to JSON"], "8": [exit, "Exit"]}
+        "7": [file_save_json, "Save file to JSON"], "8": [file_open_json, "Open file from JSON"], "9": [exit, "Exit"]}
 while True:
     clear()
     print_head("MENU")

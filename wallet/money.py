@@ -10,4 +10,4 @@ class Money:
         self.amount = amount
 
     def to_json(self):
-        return '{"currency":"' + str(self.currency) + '","amount":' + str(self.amount) + '}'
+        return dict(currency=self.currency.value, amount=self.amount)

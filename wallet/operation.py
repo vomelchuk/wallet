@@ -1,7 +1,6 @@
 from wallet.money import Money
 from wallet.enums import OperationType
 from wallet.enums import CurrencyType
-from datetime import date
 
 
 class Operation:
@@ -30,5 +29,6 @@ class Operation:
         return result
 
     def to_json(self):
-        return '{"operationType":"' + self.operationType.name + '",' + '"money":' + self.money.to_json() + ',"performDate":"' \
-               + str(self.performDate) + '",' + '"tags":' + self.get_tags() + "}"
+        return dict(operationType=self.operationType.value, money=self.money.to_json(),
+                    performDate=str(self.performDate),
+                    tags=self.tags)

@@ -30,14 +30,14 @@ class Wallet:
         return operations
 
     def to_json(self):
-        result = '{"operations":['
-        for item in range(len(self.operations)):
-            result += self.operations[item].to_json()
-            if item != len(self.operations) - 1:
-                result += ','
-        result += '],"moneys":{'
-        for item in self.moneys.keys():
-            result += '"' + str(item) + '":' + str(self.get_money(item)) + ','
-            pass
-        result += '}}'
+
+        operations = []
+        for item in self.operations:
+            operations.append(item.to_json())
+
+        moneys = {}
+        for item2 in self.moneys:
+            moneys[str(item2.value)] = self.moneys[item2]
+
+        result = str(dict(operations=operations, moneys=moneys)).replace("'", '"')
         return result
